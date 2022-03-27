@@ -1,8 +1,10 @@
 from apify_client import ApifyClient
 import csv
+import config
+import os
 
 # Initialize the ApifyClient with your API token
-client = ApifyClient("apify_api_rM9VBaqLfbBYFURfsehjpWUxvBj1lJ2uWZ3v")
+client = ApifyClient(config.api_token)
 
 # Prepare the actor input
 run_input = {
@@ -31,7 +33,7 @@ print(data)
 csv_header = ['comment_id', 'post_id', 'comment_content',
               'commenter_username', 'commenter_pic_url']
 
-with open('comments.csv', 'w', encoding='utf-8', newline='') as csvfile:
+with open(os.path.join(os.path.dirname(__file__), 'comments.csv'), 'w', encoding='utf-8', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=csv_header)
     writer.writeheader()
     writer.writerows(data)
