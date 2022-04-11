@@ -2,17 +2,6 @@
 console.log("Chrome extension go");
 
 var timeSet = new Set();
-timeSet.add("2021-12-29T19:47:01.000Z")
-timeSet.add("2021-09-09T18:58:44.000Z")
-timeSet.add("2021-08-22T18:08:26.000Z")
-timeSet.add("2021-07-03T13:59:38.000Z")
-timeSet.add("2021-06-03T02:27:32.000Z")
-timeSet.add("2021-04-14T02:11:11.000Z")
-timeSet.add("2021-04-10T07:05:34.000Z")
-timeSet.add("2021-03-28T20:36:56.000Z")
-timeSet.add("2021-03-25T22:28:08.000Z")
-timeSet.add("2021-03-18T14:31:14.000Z")
-console.log(timeSet)
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -28,12 +17,12 @@ chrome.runtime.onMessage.addListener(
                     currElement = currElement.parentElement;
                 }
                 console.log(currElement.className)
-                if (currElement.style['background-color'] == "rgb(255, 0, 0)") {
+                if (currElement.style['background-color'] == "rgb(169, 169, 169)") {
                     console.log(currElement);
                     currElement.removeAttribute("style");
                     deletefromSet(currElement);
                 } else{
-                    currElement.style['background-color'] = '#FF0000';
+                    currElement.style['background-color'] = '#A9A9A9';
                     addtoSet(currElement);
                 }
                 counter += 1;
@@ -46,10 +35,10 @@ chrome.runtime.onMessage.addListener(
             for (elt of comments){
                 var ret = markedTimestamp(elt);
                 console.log(ret);
-                if (ret && elt.style['background-color'] != "rgb(255, 0, 0)"){
-                    elt.style['background-color'] = '#FF0000';
+                if (ret && request.status == "true"){
+                    elt.style['background-color'] = '#A9A9A9';
                 } else {
-                    elt.removeAttribute("style");;
+                    elt.removeAttribute("style");
                 }
                 //console.log(elt);
             }
@@ -60,10 +49,19 @@ chrome.runtime.onMessage.addListener(
             console.log("hide requested");
             let comments = document.getElementsByClassName('Mr508 ');
             for (elt of comments){
-                if (elt.style['background-color'] == "rgb(255, 0, 0)"){
+                if (elt.style['background-color'] == "rgb(169, 169, 169)"){
                     elt.remove();
                 }
             }
+        } else if (request.text == "timestamps"){
+            var data = request.data;
+            for (var i = 0; i < data.length; i++){
+                if (data[i].PREDICTION == "1"){
+                    timeSet.add(data[i].timestamp);
+                }
+            }
+            console.log("HERE")
+            console.log(timeSet)
         }
   });
 
