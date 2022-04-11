@@ -41,20 +41,9 @@ if (el3) {
 
 function highlightOp() {
   console.log("highlight selected");
+  var opt = document.getElementById('fselect');
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { text: "highlight" });
-  });
-}
-
-var el4 = document.getElementById("hd");
-if (el4) {
-  el4.addEventListener("click", hideOp);
-}
-
-function hideOp() {
-  console.log("switch triggered");
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { text: "hide" });
+    chrome.tabs.sendMessage(tabs[0].id, { text: "fselect", op: opt.value});
   });
 }
 

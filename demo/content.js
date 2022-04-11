@@ -42,17 +42,24 @@ chrome.runtime.onMessage.addListener(
                 }
                 //console.log(elt);
             }
-        }  else if (request.text == "hl"){
-            console.log("highlight requested");
-            window.location.reload();
-        } else if (request.text == "hd"){
-            console.log("hide requested");
-            let comments = document.getElementsByClassName('Mr508 ');
-            for (elt of comments){
-                if (elt.style['background-color'] == "rgb(169, 169, 169)"){
-                    elt.remove();
+        }  else if (request.text == "fselect"){
+            if (request.op == "highlight"){
+                console.log("highlight requested");
+                let comments = document.getElementsByClassName('Mr508 ');
+                for (elt of comments){
+                    if (elt.style['background-color'] == "rgb(169, 169, 169)"){
+                        elt.style.display = "block";
+                    }
                 }
-            }
+            } else {
+                console.log("hide requested");
+                let comments = document.getElementsByClassName('Mr508 ');
+                for (elt of comments){
+                    if (elt.style['background-color'] == "rgb(169, 169, 169)"){
+                        elt.style.display = "none";
+                    }
+                }
+            } 
         } else if (request.text == "timestamps"){
             var data = request.data;
             for (var i = 0; i < data.length; i++){
