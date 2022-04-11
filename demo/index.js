@@ -19,19 +19,23 @@ var onOff = localStorage.getItem("sw");
 if (onOff == "true") {
   el2.checked = true;
 }
-
+var isParsed = false;
 function changeStyle() {
   console.log("switch triggered");
-  var onOff = localStorage.getItem("sw");
-  if(onOff == "true"){
-    localStorage.setItem("sw", "false");
-  }else{
-    localStorage.setItem("sw", "true");
+  if (isParsed == true){
+    var onOff = localStorage.getItem("sw");
+    if(onOff == "true"){
+      localStorage.setItem("sw", "false");
+    }else{
+      localStorage.setItem("sw", "true");
+    }
+    onOff = localStorage.getItem("sw");
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { text: "switchOnOff", status: onOff});
+    });
+  } else {
+    document.getElementById("sw").checked = false;
   }
-  onOff = localStorage.getItem("sw");
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { text: "switchOnOff", status: onOff});
-  });
 }
 
 var el3 = document.getElementById("fselect");
@@ -64,6 +68,7 @@ if (ini){
           return response.json(); // server returned valid JSON
         })
         .then((parsed_result) => {
+          isParsed = true;
           console.log(parsed_result);
           chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { text: "timestamps", data: parsed_result});
